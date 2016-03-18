@@ -77,13 +77,35 @@ void quickSort(struct node **headRef){
 struct node * sortLinkedList(struct node *head) {
 	if (head==NULL || head->next==NULL)
 		return head;
-	struct node *iter,*iter1,*min;
-	for (iter = head; iter != NULL; iter = iter->next){
+	struct node *iter,*iter1,*min=head,*temp;
+	int val;
+	//find the minimum element and place it in head
+	for (iter = head; iter != NULL;iter=iter->next ){
+		if (iter->num < min->num){
+			min = iter;
+		}
+	}		
+	if (min != head){
+		val = head->num;
+		head->num = min->num;
+		min->num = val;
+	}
+
+	
+	for (iter = head; iter->next != NULL; iter = iter->next){
 		min = iter;
-		for (iter1 = iter->next; iter1 != NULL; iter1 = iter1->next){
-			if (iter1->num < min->num){
+		for (iter1 = iter->next; iter1->next != NULL; iter1 = iter1->next){
+			if (iter1->next->num < min->next->num){
 				min = iter1;
 			}
+		}
+		if (min != iter){
+			temp = iter->next;
+			iter->next = min->next;
+			min->next = temp;
+			temp = iter->next->next;
+			iter->next->next = min->next->next;
+			min->next->next = temp;
 		}
 	}
 	return head;
